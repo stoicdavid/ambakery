@@ -8,8 +8,8 @@ body:
   - type: input
     id: epic_link
     attributes:
-      label: Parent epic
-      description: Link the epic issue (if exists).
+      label: Epica relacionada
+      description: Víncula la épica 8(si existe).
       placeholder: "#100"
     validations:
       required: false
@@ -17,29 +17,29 @@ body:
   - type: input
     id: feature_summary
     attributes:
-      label: Feature summary
-      description: Short description of the capability.
-      placeholder: "Bulk upload of loan accounts..."
+      label: Descripción
+      description: Breve descripción de la funcionalidad.
+      placeholder: "Carga masiva de los productos..."
     validations:
       required: true
 
   - type: textarea
     id: details
     attributes:
-      label: Details
-      description: What does this feature do? Any constraints?
+      label: Detalles
+      description: ¿Qué hace esta funcionalidad? ¿Hay restricciones?
       placeholder: |
-        This feature will allow...
+        Esta funcionalidad permitirá...
     validations:
       required: true
 
   - type: textarea
     id: stories
     attributes:
-      label: Stories (linked issues)
-      description: Link user stories as a checklist.
+      label: Historias (asociadas)
+      description: Vinclula las historias a manera de checklist.
       placeholder: |
-        - [ ] #201 As a RM, I can upload a CSV...
-        - [ ] #202 As an analyst, I can view validation errors...
+        - [ ] #201 Como cliente, puedo consultar el catalogo...
+        - [ ] #202 Como administrador, puedo eliminar el producto...
     validations:
       required: false
