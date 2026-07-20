@@ -1,5 +1,5 @@
 name: Feature
-description: Deliverable feature within an epic
+description: Funcionalidad comprendida dentro de la épica (HOW)
 title: "[Feature] "
 labels:
   - "Type: Feature"

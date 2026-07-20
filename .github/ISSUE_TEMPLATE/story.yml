@@ -1,5 +1,5 @@
 name: User story
-description: Historia de usuario con criterios de aceptación
+description: Historia de usuario con criterios de aceptación (WHO & WHY)
 title: "[Story] "
 labels:
   - "Type: Story"
