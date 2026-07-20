@@ -28,7 +28,7 @@ body:
     id: features
     attributes:
       label: Features (linked issues)
-      description: Link feature issues as a checklist. Convert items to issues as needed.
+      description: Vincula los features como un checklist. Convierte cada uno en un issue conforme se requiera.
       placeholder: |
         - [ ] #123 Self-service onboarding
         - [ ] #124 Revenue analytics dashboard
@@ -43,6 +43,5 @@ body:
       placeholder: |
         - NPS +10
         - Reducción en tiempo de -30%
-		- Incremento en clientes
     validations:
       required: false
