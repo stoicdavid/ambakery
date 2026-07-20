@@ -1,5 +1,5 @@
 name: Epic
-description: Large initiative grouping multiple features and stories
+description: Iniciativa amplia agrupando features e historias (QUÉ)
 title: "[Epic] "
 labels:
   - "Type: Epic"
@@ -9,8 +9,8 @@ body:
     id: epic_outcome
     attributes:
       label: Epic outcome
-      description: What business outcome should this epic achieve?
-      placeholder: "Increase corporate lending revenue by 15%..."
+      description: ¿Cuál es el beneficio que quieres obtener con esta iniciativa?
+      placeholder: "Mejorar la experiencia de uso de la aplicación para atraer mas clientes"
     validations:
       required: true
 
@@ -18,22 +18,11 @@ body:
     id: problem
     attributes:
       label: Problem / context
-      description: Describe the current situation and why this epic is needed.
+      description: Describe la situación actual y porque se necesita
       placeholder: |
-        Today, corporate clients...
+        Hoy en día, los clientes enfrentan ...
     validations:
-      required: true
-
-  - type: textarea
-    id: success_metrics
-    attributes:
-      label: Success metrics
-      description: How will we measure success?
-      placeholder: |
-        - NPS +10
-        - Onboarding time -30%
-    validations:
-      required: true
+      required: false
 
   - type: textarea
     id: features
@@ -47,12 +36,13 @@ body:
       required: false
 
   - type: textarea
-    id: risks
+    id: success_metrics
     attributes:
-      label: Risks and assumptions
-      description: Key risks or assumptions for this epic.
+      label: Success metrics
+      description: ¿Cómo medirás si la iniciativa resultó exitosa? 
       placeholder: |
-        - Risk: ...
-        - Assumption: ...
+        - NPS +10
+        - Reducción en tiempo de -30%
+		- Incremento en clientes
     validations:
       required: false
