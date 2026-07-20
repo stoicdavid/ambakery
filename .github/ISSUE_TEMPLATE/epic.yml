@@ -1,0 +1,58 @@
+name: Epic
+description: Large initiative grouping multiple features and stories
+title: "[Epic] "
+labels:
+  - "Type: Epic"
+  - "Status: To do"
+body:
+  - type: input
+    id: epic_outcome
+    attributes:
+      label: Epic outcome
+      description: What business outcome should this epic achieve?
+      placeholder: "Increase corporate lending revenue by 15%..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem / context
+      description: Describe the current situation and why this epic is needed.
+      placeholder: |
+        Today, corporate clients...
+    validations:
+      required: true
+
+  - type: textarea
+    id: success_metrics
+    attributes:
+      label: Success metrics
+      description: How will we measure success?
+      placeholder: |
+        - NPS +10
+        - Onboarding time -30%
+    validations:
+      required: true
+
+  - type: textarea
+    id: features
+    attributes:
+      label: Features (linked issues)
+      description: Link feature issues as a checklist. Convert items to issues as needed.
+      placeholder: |
+        - [ ] #123 Self-service onboarding
+        - [ ] #124 Revenue analytics dashboard
+    validations:
+      required: false
+
+  - type: textarea
+    id: risks
+    attributes:
+      label: Risks and assumptions
+      description: Key risks or assumptions for this epic.
+      placeholder: |
+        - Risk: ...
+        - Assumption: ...
+    validations:
+      required: false

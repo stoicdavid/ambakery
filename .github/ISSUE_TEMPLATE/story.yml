@@ -1,0 +1,61 @@
+name: User story
+description: Create a user story with acceptance criteria
+title: "[Story] "
+labels:
+  - "Type: Story"
+  - "Status: To do"
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please fill out the user story and acceptance criteria.
+
+  - type: input
+    id: persona
+    attributes:
+      label: Persona
+      description: Who is the user?
+      placeholder: "As a new corporate client admin..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: goal
+    attributes:
+      label: User goal
+      description: What do they want to do?
+      placeholder: "I want to onboard my company’s subsidiaries..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: value
+    attributes:
+      label: Business value
+      description: Why is this valuable?
+      placeholder: "So that we reduce manual onboarding time..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance_criteria
+    attributes:
+      label: Acceptance criteria
+      description: List testable outcomes.
+      placeholder: |
+        - [ ] Given X, when Y, then Z
+        - [ ] ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: subtasks
+    attributes:
+      label: Sub-tasks
+      description: Optional technical breakdown as a checklist.
+      placeholder: |
+        - [ ] Backend
+        - [ ] Frontend
+        - [ ] Tests
+    validations:
+      required: false
