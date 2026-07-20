@@ -8,7 +8,7 @@ body:
   - type: input
     id: epic_outcome
     attributes:
-      label: Epic outcome
+      label: Beneficio esperado
       description: ¿Cuál es el beneficio que quieres obtener con esta iniciativa?
       placeholder: "Mejorar la experiencia de uso de la aplicación para atraer mas clientes"
     validations:
@@ -17,7 +17,7 @@ body:
   - type: textarea
     id: problem
     attributes:
-      label: Problem / context
+      label: Contexto
       description: Describe la situación actual y porque se necesita
       placeholder: |
         Hoy en día, los clientes enfrentan ...
@@ -27,7 +27,7 @@ body:
   - type: textarea
     id: features
     attributes:
-      label: Features (linked issues)
+      label: Features (asociados)
       description: Vincula los features como un checklist. Convierte cada uno en un issue conforme se requiera.
       placeholder: |
         - [ ] #123 Self-service onboarding
@@ -38,7 +38,7 @@ body:
   - type: textarea
     id: success_metrics
     attributes:
-      label: Success metrics
+      label: Métricas de éxito
       description: ¿Cómo medirás si la iniciativa resultó exitosa? 
       placeholder: |
         - NPS +10
