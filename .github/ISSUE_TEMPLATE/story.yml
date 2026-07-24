@@ -24,7 +24,7 @@ body:
         - [ ] DADO X, CUANDO Y, ENTONCES Z
         - [ ] DADO un producto en el catálogo, CUANDO el cliente lo seleccione, ENTONCES despliega la descripción y una foto...
     validations:
-      required: true
+      required: false
 
   - type: textarea
     id: subtasks
