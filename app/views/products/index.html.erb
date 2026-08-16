@@ -1,3 +1,5 @@
+<%= turbo_stream_from "products" %>
+<%= turbo_refreshes_with method: :morph, scroll: :preserve %>
 <% content_for :title, "Products" %>
 
 <div class="w-full">
@@ -7,23 +9,46 @@
 
   <div class="flex justify-between items-center">
     <h1 class="font-bold text-4xl">Products</h1>
-    <%= link_to "New product", new_product_path, class: "rounded-md px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white block font-medium" %>
   </div>
 
-  <div id="products" class="min-w-full divide-y divide-gray-200 space-y-5">
-    <% if @products.any? %>
-      <% @products.each do |product| %>
-        <div class="flex flex-col sm:flex-row justify-between items-center pb-5 sm:pb-0">
-          <%= render product %>
-          <div class="w-full sm:w-auto flex flex-col sm:flex-row space-x-2 space-y-2">
-            <%= link_to "Show", product, class: "w-full sm:w-auto text-center rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
-            <%= link_to "Edit", edit_product_path(product), class: "w-full sm:w-auto text-center rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
-            <%= button_to "Destroy", product, method: :delete, class: "w-full sm:w-auto rounded-md px-3.5 py-2.5 text-white bg-red-600 hover:bg-red-500 font-medium cursor-pointer", data: { turbo_confirm: "Are you sure?" } %>
-          </div>
-        </div>
-      <% end %>
-    <% else %>
-      <p class="text-center my-10">No products found.</p>
+<table id="products" class="mx-auto">
+    <tfoot>
+      <tr>
+        <td colspan="3">
+            <div class="flex justify-between items-center">
+                <%= link_to "New product", new_product_path, class: "rounded-md px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white block font-medium" %>
+            </div>
+        </td>
+      </tr>
+    </tfoot>
+
+    <tbody>
+    <% @products.each do |product| %>
+      <tr class="<%= cycle('bg-white', 'bg-gray-50') %>">
+        <td class="px-2 py-3">
+            <%= image_tag product.image, class: "w-40" %>
+        </td>
+        <td>
+            <h1 class="font-bold text-2xl"><%= product.name %></h1>
+            <p class="text-gray-500"><%= truncate(strip_tags(product.description), length: 80) %></p>
+            <%= number_to_currency(product.price) %>
+
+		</td>
+        <td class="px-3">
+            <ul>
+                <li>
+                    <%= link_to 'Show', product, class: "hover:underline" %>
+                </li>
+                <li>
+                    <%= link_to 'Edit', edit_product_path(product), class: "hover:underline" %>
+                </li>
+                <li>
+                    <%= button_to 'Destroy', product, method: :delete, data: { confirm: 'Are you sure?' }, class: "hover:underline" %>
+                </li>
+            </ul>
+        </td>
+      </tr>
     <% end %>
+    </tbody>
+    </table>
   </div>
-</div>
