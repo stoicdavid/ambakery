@@ -1,0 +1,4 @@
+blob_one: <%= ActiveStorage::FixtureSet.blob filename: 'panecito.png' %>
+blob_two: <%= ActiveStorage::FixtureSet.blob filename: 'pastelito.png' %>
+blob_panecito: <%= ActiveStorage::FixtureSet.blob filename: 'panecito.png' %>
+blob_pastelito: <%= ActiveStorage::FixtureSet.blob filename: 'pastelito.png' %>
