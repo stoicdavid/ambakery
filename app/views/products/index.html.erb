@@ -1,0 +1,54 @@
+<%= turbo_stream_from "products" %>
+<%= turbo_refreshes_with method: :morph, scroll: :preserve %>
+<% content_for :title, "Products" %>
+
+<div class="w-full">
+  <% if notice.present? %>
+    <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-md inline-block" id="notice"><%= notice %></p>
+  <% end %>
+
+  <div class="flex justify-between items-center">
+    <h1 class="font-bold text-4xl">Products</h1>
+  </div>
+
+<table id="products" class="mx-auto">
+    <tfoot>
+      <tr>
+        <td colspan="3">
+            <div class="flex justify-between items-center">
+                <%= link_to "New product", new_product_path, class: "rounded-md px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white block font-medium" %>
+            </div>
+        </td>
+      </tr>
+    </tfoot>
+
+    <tbody>
+    <% @products.each do |product| %>
+      <tr class="<%= cycle('bg-white', 'bg-gray-50') %>">
+        <td class="px-2 py-3">
+            <%= image_tag product.image, class: "w-40" %>
+        </td>
+        <td>
+            <h1 class="font-bold text-2xl"><%= product.name %></h1>
+            <p class="text-gray-500"><%= truncate(strip_tags(product.description), length: 80) %></p>
+            <%= number_to_currency(product.price) %>
+
+		</td>
+        <td class="px-3">
+            <ul>
+                <li>
+                    <%= link_to 'Show', product, class: "hover:underline" %>
+                </li>
+                <li>
+                    <%= link_to 'Edit', edit_product_path(product), class: "hover:underline" %>
+                </li>
+                <li>
+                    <%= button_to 'Destroy', product, method: :delete, data: { confirm: 'Are you sure?' }, class: "hover:underline" %>
+                </li>
+            </ul>
+        </td>
+      </tr>
+    <% end %>
+    </tbody>
+    </table>
+  </div>

@@ -1,0 +1,19 @@
+one:
+  name: image
+  record: one(Product)
+  blob: blob_one
+
+two:
+  name: image
+  record: two(Product)
+  blob: blob_two
+
+panecito:
+  name: image
+  record: panecito(Product)
+  blob: blob_panecito
+
+pastelito:
+  name: image
+  record: pastelito(Product)
+  blob: blob_pastelito

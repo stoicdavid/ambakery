@@ -1,0 +1,29 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  slug: My-String-1
+  description: MyText
+  order: 1
+  price: 9.99
+
+two:
+  name: MyString
+  slug: My-String-2
+  description: MyText
+  order: 1
+  price: 9.99
+
+panecito:
+  name: Mi Panecito
+  slug: Mi-Panecito
+  description: Esta muy sabrosito
+  order: 1
+  price: 9.99
+
+pastelito:
+  name: Mi Pastelito
+  slug: Mi-Pastelito
+  description: Esta muy esponjoso
+  order: 2
+  price: 12.99
