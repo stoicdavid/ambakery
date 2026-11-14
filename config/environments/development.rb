@@ -7,7 +7,7 @@ Rails.application.configure do
   config.enable_reloading = true
 
   config.hosts << ".trycloudflare.com"
-  
+
   # Do not eager load code on boot.
   config.eager_load = false
 

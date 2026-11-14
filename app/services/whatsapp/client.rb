@@ -28,13 +28,13 @@ module Whatsapp
       end
       deliver to, conversation, type: "interactive", interactive: {
         type: "list", body: { text: body.truncate(1024) },
-        action: { button: button_label.truncate(20), sections: [{ title: "Opciones", rows: rows }] }
+        action: { button: button_label.truncate(20), sections: [ { title: "Opciones", rows: rows } ] }
       }
     end
 
     def send_template(to, name, params = [], language: "es_MX", conversation: nil)
       components = params.any? ?
-        [{ type: "body", parameters: params.map { |p| { type: "text", text: p.to_s } } }] : []
+        [ { type: "body", parameters: params.map { |p| { type: "text", text: p.to_s } } } ] : []
       deliver to, conversation, type: "template",
               template: { name: name, language: { code: language }, components: components }
     end

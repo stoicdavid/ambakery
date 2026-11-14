@@ -21,14 +21,14 @@ class ProductionReport
     orders.includes(:customer, :delivery_zone, order_items: { product_variant: :product })
           .order(:created_at)
           .group_by { |o| o.delivery_zone || NO_ZONE }
-          .sort_by { |zone, _| zone == NO_ZONE ? [1, ""] : [0, zone.name] }
+          .sort_by { |zone, _| zone == NO_ZONE ? [ 1, "" ] : [ 0, zone.name ] }
           .to_h
   end
 
   def to_csv
     CSV.generate do |csv|
       csv << %w[Producto Variante Cantidad]
-      totals.each { |(product, variant), qty| csv << [product, variant, qty] }
+      totals.each { |(product, variant), qty| csv << [ product, variant, qty ] }
     end
   end
 end

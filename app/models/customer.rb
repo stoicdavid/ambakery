@@ -12,6 +12,6 @@ class Customer < ApplicationRecord
   def self.normalize_mx(number)
     number.to_s.gsub(/\D/, "").sub(/\A521(\d{10})\z/, '52\1')
   end
-  
+
   def whatsapp_to = phone.presence || wa_id
 end

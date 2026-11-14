@@ -7,7 +7,7 @@ class Admin::OrdersController < ApplicationController
 
   def update
     order = Order.find(params[:id])
-    order.update!(params.expect(order: [:status]))
+    order.update!(params.expect(order: [ :status ]))
     redirect_to admin_orders_path, notice: "#{order.number}: #{order.status.humanize}"
   end
 end

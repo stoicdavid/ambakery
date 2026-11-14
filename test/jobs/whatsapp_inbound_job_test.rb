@@ -4,7 +4,7 @@ class WhatsappInboundJobTest < ActiveJob::TestCase
   setup do
     # Stubbed so the echo (5.3) and the order flow (6) can reply without calling Meta
     @send = stub_request(:post, %r{graph\.facebook\.com/.+/messages})
-              .to_return(body: { messages: [{ id: "wamid.OUT" }] }.to_json)
+              .to_return(body: { messages: [ { id: "wamid.OUT" } ] }.to_json)
   end
 
   test "creates the customer, logs the message once, replies once" do

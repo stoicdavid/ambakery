@@ -13,6 +13,6 @@ class CreateWhatsappMessages < ActiveRecord::Migration[8.1]
       t.timestamps
     end
     add_index :whatsapp_messages, :wamid, unique: true
-    add_index :whatsapp_messages, [:whatsapp_conversation_id, :created_at]
+    add_index :whatsapp_messages, [ :whatsapp_conversation_id, :created_at ]
   end
 end

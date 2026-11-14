@@ -180,9 +180,9 @@ module Whatsapp
     # ── Confirm ───────────────────────────────────────────
     def ask_confirm
       o = order.reload
-      summary = ["📋 *Resumen de tu pedido*", cart_summary, "",
+      summary = [ "📋 *Resumen de tu pedido*", cart_summary, "",
                  "📍 #{o.delivery_zone.name}", "📅 #{o.delivery_date.label}",
-                 (o.notes.present? ? "📝 #{o.notes}" : nil), "", "*Total: #{money(o.total_cents)}*"]
+                 (o.notes.present? ? "📝 #{o.notes}" : nil), "", "*Total: #{money(o.total_cents)}*" ]
       buttons summary.compact.join("\n"),
               "confirm:yes" => "Confirmar", "confirm:edit" => "Cambiar", "confirm:no" => "Cancelar"
       @conv.transition!("confirm")

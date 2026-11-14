@@ -16,6 +16,6 @@ class CreateOrders < ActiveRecord::Migration[8.1]
 
       t.timestamps
     end
-    add_index :orders, [:scheduled_on, :status]   # powers the daily production report
+    add_index :orders, [ :scheduled_on, :status ]   # powers the daily production report
   end
 end

@@ -6,7 +6,7 @@ class WhatsappOrderingTest < ActionDispatch::IntegrationTest
   setup do
     # A new wamid per request, like real Meta. A fixed ID would break the unique index on wamid
     stub_request(:post, %r{graph\.facebook\.com/.+/messages})
-      .to_return { { body: { messages: [{ id: "wamid.out.#{SecureRandom.hex(6)}" }] }.to_json } }
+      .to_return { { body: { messages: [ { id: "wamid.out.#{SecureRandom.hex(6)}" } ] }.to_json } }
     @variant = Product.create!(name: "Concha", category: "tradicional")
                       .variants.create!(name: "Vainilla", price_cents: 2_200)
     @zone = DeliveryZone.create!(name: "Valle de San Javier")
@@ -19,11 +19,11 @@ class WhatsappOrderingTest < ActionDispatch::IntegrationTest
     else
       { type: "text", text: { body: input } }
     end
-    body = { object: "whatsapp_business_account", entry: [{ id: "WABA_ID", changes: [{ field: "messages",
+    body = { object: "whatsapp_business_account", entry: [ { id: "WABA_ID", changes: [ { field: "messages",
       value: { messaging_product: "whatsapp", metadata: { phone_number_id: "PHONE_ID" },
-               contacts: [{ wa_id: "5215500000000", profile: { name: "Ana" } }],
-               messages: [{ from: "5215500000000", id: "wamid.#{SecureRandom.hex(6)}",
-                            timestamp: Time.now.to_i.to_s, **message }] } }] }] }.to_json
+               contacts: [ { wa_id: "5215500000000", profile: { name: "Ana" } } ],
+               messages: [ { from: "5215500000000", id: "wamid.#{SecureRandom.hex(6)}",
+                            timestamp: Time.now.to_i.to_s, **message } ] } } ] } ] }.to_json
     sig = "sha256=" + OpenSSL::HMAC.hexdigest("SHA256", Whatsapp.config[:app_secret], body)
 
     perform_enqueued_jobs only: WhatsappInboundJob do
@@ -33,8 +33,8 @@ class WhatsappOrderingTest < ActionDispatch::IntegrationTest
   end
 
   test "an order placed on WhatsApp appears on tomorrow's production report" do
-    ["hola", "menu:order", "cat:tradicional", "prod:#{@variant.product_id}", "12",
-     "more:no", "zone:#{@zone.id}", "date:#{@date.id}", "notes:skip", "confirm:yes"].each { whatsapp(_1) }
+    [ "hola", "menu:order", "cat:tradicional", "prod:#{@variant.product_id}", "12",
+     "more:no", "zone:#{@zone.id}", "date:#{@date.id}", "notes:skip", "confirm:yes" ].each { whatsapp(_1) }
 
     assert Order.last.pending_payment?
 

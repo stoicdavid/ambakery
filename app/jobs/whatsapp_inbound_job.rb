@@ -26,7 +26,7 @@ class WhatsappInboundJob < ApplicationJob
     inbound = WhatsappMessage.record_inbound!(conversation: conversation, message: message)
     return unless inbound   # nil = Meta resent a message we already processed
 
-    #Whatsapp::Client.new.send_text(customer.whatsapp_to, "Recibí: #{inbound.body}", conversation: conversation)
+    # Whatsapp::Client.new.send_text(customer.whatsapp_to, "Recibí: #{inbound.body}", conversation: conversation)
     Whatsapp::OrderFlow.new(conversation, inbound).call
   end
 
