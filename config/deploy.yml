@@ -30,7 +30,8 @@ proxy:
 # Where you keep your container images.
 registry:
   server: 127.0.0.1:5000       # copied from the website's deploy.yml
-
+  username: amoramasa
+  password: unused
   # Needed for authenticated registries.
   # username: your-user
 
