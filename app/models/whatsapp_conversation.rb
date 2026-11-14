@@ -1,7 +1,7 @@
 class WhatsappConversation < ApplicationRecord
   SERVICE_WINDOW = 24.hours
-  STATES = %w[idle choose_category choose_product choose_variant quantity
-              add_more fulfillment address date time_slot notes confirm].freeze
+  STATES = %w[idle menu choose_category choose_product choose_variant quantity
+              add_more zone date notes confirm human].freeze
 
   belongs_to :customer
   belongs_to :draft_order, class_name: "Order", optional: true

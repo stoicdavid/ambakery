@@ -1,0 +1,9 @@
+<%# app/views/production_report_mailer/daily.text.erb %>
+Producción · <%= DeliveryDate.label_for(@report.date) %> (<%= @report.orders.count %> pedidos)
+
+QUÉ HORNEAR
+<% @report.totals.each do |(product, variant), qty| %>
+<%= qty.to_s.rjust(4) %>  <%= product %> · <%= variant %>
+<% end %>
+
+Detalle: <%= admin_production_url(date: @report.date) %>

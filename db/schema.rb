@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_14_050442) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_14_070809) do
   create_table "customers", force: :cascade do |t|
     t.string "name"
     t.string "phone"
@@ -19,6 +19,25 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_14_050442) do
     t.datetime "updated_at", null: false
     t.index ["phone"], name: "index_customers_on_phone", unique: true
     t.index ["wa_id"], name: "index_customers_on_wa_id", unique: true
+  end
+
+  create_table "delivery_dates", force: :cascade do |t|
+    t.integer "delivery_zone_id", null: false
+    t.date "date"
+    t.datetime "cutoff_at"
+    t.integer "capacity"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["delivery_zone_id"], name: "index_delivery_dates_on_delivery_zone_id"
+  end
+
+  create_table "delivery_zones", force: :cascade do |t|
+    t.string "name", null: false
+    t.text "description"
+    t.boolean "active", default: true
+    t.integer "position", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "order_items", force: :cascade do |t|
@@ -47,7 +66,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_14_050442) do
     t.integer "total_cents", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "delivery_zone_id"
+    t.integer "delivery_date_id"
     t.index ["customer_id"], name: "index_orders_on_customer_id"
+    t.index ["delivery_date_id"], name: "index_orders_on_delivery_date_id"
+    t.index ["delivery_zone_id"], name: "index_orders_on_delivery_zone_id"
     t.index ["scheduled_on", "status"], name: "index_orders_on_scheduled_on_and_status"
   end
 
@@ -121,9 +144,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_14_050442) do
     t.index ["whatsapp_conversation_id"], name: "index_whatsapp_messages_on_whatsapp_conversation_id"
   end
 
+  add_foreign_key "delivery_dates", "delivery_zones"
   add_foreign_key "order_items", "orders"
   add_foreign_key "order_items", "product_variants"
   add_foreign_key "orders", "customers"
+  add_foreign_key "orders", "delivery_dates"
+  add_foreign_key "orders", "delivery_zones"
   add_foreign_key "product_variants", "products"
   add_foreign_key "sessions", "users"
   add_foreign_key "whatsapp_conversations", "customers"

@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  delivery_zone: one
+  date: 2026-11-14
+  cutoff_at: 2026-11-14 01:08:01
+  capacity: 1
+
+two:
+  delivery_zone: two
+  date: 2026-11-14
+  cutoff_at: 2026-11-14 01:08:01
+  capacity: 1

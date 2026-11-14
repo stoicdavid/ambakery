@@ -7,6 +7,15 @@ Rails.application.routes.draw do
   # Can be used by load balancers and uptime monitors to verify that the app is live.
   get "up" => "rails/health#show", as: :rails_health_check
 
+  namespace :admin do
+    root "dashboard#index"
+    resource  :production, only: :show, controller: "production"   # /admin/production?date=
+    resources :orders, only: %i[index update]
+    resources :conversations, only: %i[index show] do
+      resources :replies, only: :create
+    end
+  end
+
   scope "webhooks" do
     get  "whatsapp", to: "whatsapp_webhooks#verify"
     post "whatsapp", to: "whatsapp_webhooks#receive"
@@ -16,9 +25,6 @@ Rails.application.routes.draw do
   # get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
-  namespace :admin do
-    root "dashboard#index"   # /admin → later becomes the production report
-  end
 
   # Defines the root path route ("/")
   root to: redirect("/session/new")   # visiting the app's root shows the login page

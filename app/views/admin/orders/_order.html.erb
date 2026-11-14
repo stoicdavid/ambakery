@@ -1,0 +1,16 @@
+<div id="<%= dom_id(order) %>" class="border rounded p-3 mb-2">
+  <div class="flex justify-between">
+    <strong><%= order.number %> · <%= order.customer.name %></strong>
+    <span><%= order.delivery_zone&.name %> · <%= order.delivery_date&.label %></span>
+  </div>
+  <p class="text-sm"><%= order.order_items.map { "#{_1.quantity} × #{_1.product_variant.display_name}" }.to_sentence %></p>
+  <div class="flex justify-between items-center mt-2">
+    <span class="text-sm"><%= order.status.humanize %> · <%= mxn(order.total_cents) %></span>
+    <% next_status, label = Order::NEXT_STEP[order.status] %>
+    <% if next_status %>
+      <%= button_to label, admin_order_path(order), method: :patch,
+            params: { order: { status: next_status } },
+            class: "px-3 py-1 rounded bg-stone-800 text-white text-sm" %>
+    <% end %>
+  </div>
+</div>

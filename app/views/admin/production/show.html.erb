@@ -1,0 +1,45 @@
+<div class="max-w-4xl mx-auto p-6 print:p-0">
+  <div class="flex items-center justify-between mb-6 print:hidden">
+    <%= form_with url: admin_production_path, method: :get, class: "flex gap-2" do |f| %>
+      <%= f.date_field :date, value: @report.date, class: "border rounded px-2 py-1" %>
+      <%= f.submit "Ver", class: "px-3 py-1 rounded bg-stone-800 text-white" %>
+    <% end %>
+    <div class="flex gap-4">
+      <%= link_to "Descargar CSV", admin_production_path(date: @report.date, format: :csv) %>
+      <button onclick="window.print()">Imprimir</button>
+    </div>
+  </div>
+
+  <h1 class="text-2xl font-semibold">Producción · <%= DeliveryDate.label_for(@report.date) %></h1>
+
+  <h2 class="mt-6 text-lg font-semibold">Qué hornear</h2>
+  <table class="w-full mt-2 text-sm">
+    <% @report.totals.each do |(product, variant), qty| %>
+      <tr class="border-b">
+        <td class="py-1"><%= product %> · <%= variant %></td>
+        <td class="text-right font-mono text-base"><%= qty %></td>
+      </tr>
+    <% end %>
+  </table>
+
+  <% @report.orders_by_zone.each do |zone, orders| %>
+    <section class="mt-8 break-before-page">
+      <h2 class="text-lg font-semibold">📍 <%= zone.name %> · <%= orders.size %> pedidos</h2>
+      <% orders.each do |order| %>
+        <div class="border rounded p-3 mt-2 break-inside-avoid">
+          <div class="flex justify-between">
+            <strong><%= order.number %> · <%= order.customer.name %></strong>
+            <span class="text-sm"><%= order.status.humanize %> · <%= mxn(order.total_cents) %></span>
+          </div>
+          <div class="text-xs text-stone-500"><%= order.customer.phone %></div>
+          <ul class="mt-1 text-sm">
+            <% order.order_items.each do |item| %>
+              <li><%= item.quantity %> × <%= item.product_variant.display_name %></li>
+            <% end %>
+          </ul>
+          <% if order.notes.present? %><p class="mt-1 text-sm italic">📝 <%= order.notes %></p><% end %>
+        </div>
+      <% end %>
+    </section>
+  <% end %>
+</div>

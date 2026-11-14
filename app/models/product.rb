@@ -1,5 +1,8 @@
 class Product < ApplicationRecord
-  CATEGORIES = %w[tradicional especial temporada].freeze
+  CATEGORY_NAMES = { "tradicional" => "Pan tradicional",
+                     "especial"    => "Selección especial",
+                     "temporada"   => "De temporada" }.freeze
+  CATEGORIES = CATEGORY_NAMES.keys.freeze
 
   has_many :variants, -> { order(:position) },
            class_name: "ProductVariant", dependent: :destroy

@@ -43,3 +43,15 @@ product "Pemoles",                 category: "especial", position: 5,
 
 # Seasonal: hidden until Día de Muertos
 product "Pan de muerto", category: "temporada", position: 0, active: false
+
+pachuca = DeliveryZone.find_or_create_by!(name: "Valle de San Javier") do |z|
+  z.description = "Pachuca, Hgo."; z.position = 0
+end
+cdmx = DeliveryZone.find_or_create_by!(name: "Ángel de la Independencia") do |z|
+  z.description = "CDMX · punto de entrega"; z.position = 1
+end
+# Example dates. The team will add real ones from the admin (Step 8)
+[pachuca, cdmx].each do |zone|
+  date = Date.current.next_occurring(:friday)
+  zone.delivery_dates.find_or_create_by!(date: date) { |d| d.cutoff_at = (date - 2).end_of_day }
+end

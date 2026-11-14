@@ -1,0 +1,52 @@
+<%# app/views/production_report_mailer/daily.html.erb %>
+<div style="font-family: -apple-system, Segoe UI, Helvetica, Arial, sans-serif; color: #292524; max-width: 600px; margin: 0 auto;">
+
+  <h1 style="font-size: 22px; margin: 0 0 4px;">
+    Producción · <%= DeliveryDate.label_for(@report.date) %>
+  </h1>
+  <p style="margin: 0 0 20px; color: #78716c;">
+    <%= pluralize(@report.orders.count, "pedido") %> confirmados o pendientes de pago
+  </p>
+
+  <% if @report.totals.empty? %>
+    <p>No hay pedidos para este día. 🎉</p>
+  <% else %>
+
+    <h2 style="font-size: 16px; margin: 0 0 8px;">Qué hornear</h2>
+    <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
+      <% @report.totals.each do |(product, variant), qty| %>
+        <tr>
+          <td style="padding: 6px 0; border-bottom: 1px solid #e7e5e4;"><%= product %> · <%= variant %></td>
+          <td style="padding: 6px 0; border-bottom: 1px solid #e7e5e4; text-align: right; font-family: Menlo, monospace; font-size: 16px;"><%= qty %></td>
+        </tr>
+      <% end %>
+    </table>
+
+    <% @report.orders_by_zone.each do |zone, orders| %>
+      <h2 style="font-size: 16px; margin: 28px 0 8px;">
+        📍 <%= zone.name %> · <%= pluralize(orders.size, "pedido") %>
+      </h2>
+      <% orders.each do |order| %>
+        <div style="border: 1px solid #e7e5e4; border-radius: 6px; padding: 10px 12px; margin-bottom: 8px; font-size: 14px;">
+          <div>
+            <strong><%= order.number %> · <%= order.customer.name.presence || "Cliente" %></strong>
+            <span style="float: right; color: #78716c;"><%= order.status.humanize %> · <%= mxn(order.total_cents) %></span>
+          </div>
+          <div style="color: #78716c; font-size: 12px;"><%= order.customer.phone %></div>
+          <div style="margin-top: 4px;">
+            <%= order.order_items.map { |i| "#{i.quantity} × #{i.product_variant.display_name}" }.join(" · ") %>
+          </div>
+          <% if order.notes.present? %>
+            <div style="margin-top: 4px; font-style: italic;">📝 <%= order.notes %></div>
+          <% end %>
+        </div>
+      <% end %>
+    <% end %>
+
+  <% end %>
+
+  <p style="margin-top: 24px; font-size: 13px;">
+    <%= link_to "Ver e imprimir en el panel", admin_production_url(date: @report.date) %> ·
+    El CSV va adjunto.
+  </p>
+</div>
