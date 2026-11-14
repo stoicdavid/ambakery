@@ -11,6 +11,10 @@ Rails.application.routes.draw do
   # get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
+  namespace :admin do
+    root "dashboard#index"   # /admin → later becomes the production report
+  end
+
   # Defines the root path route ("/")
-  # root "posts#index"
+  root to: redirect("/session/new")   # visiting the app's root shows the login page
 end
