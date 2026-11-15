@@ -9,17 +9,21 @@
 #     priority: 2
 #     schedule: at 5am every day
 
+
+# config/recurring.yml
 production:
   clear_solid_queue_finished_jobs:
     command: "SolidQueue::Job.clear_finished_in_batches(sleep_between_batches: 0.3)"
     schedule: every hour at minute 12
 
-daily_production_report:
+  daily_production_report:
     class: DailyProductionReportJob
-    schedule: every day at 6pm America/Mexico_City
+    schedule: "0 18 * * * America/Mexico_City"
+
   delivery_reminders:
     class: OrderReminderJob
-    schedule: every day at 11am America/Mexico_City
+    schedule: "0 11 * * * America/Mexico_City"
+
   expire_stale_drafts:
     command: "WhatsappConversation.where.not(draft_order_id: nil).where(updated_at: ...24.hours.ago).find_each(&:reset!)"
     schedule: every hour
