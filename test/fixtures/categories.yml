@@ -1,0 +1,15 @@
+tradicional:
+  name: Pan tradicional
+  slug: pan-tradicional
+  position: 0
+especial:
+  name: Selección especial
+  slug: seleccion-especial
+  position: 1
+temporada:
+  name: Día de Muertos
+  slug: dia-de-muertos
+  seasonal: true
+  starts_on: 2026-10-01
+  ends_on: 2026-11-02
+  position: 2

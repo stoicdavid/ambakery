@@ -7,8 +7,10 @@ class WhatsappOrderingTest < ActionDispatch::IntegrationTest
     # A new wamid per request, like real Meta. A fixed ID would break the unique index on wamid
     stub_request(:post, %r{graph\.facebook\.com/.+/messages})
       .to_return { { body: { messages: [ { id: "wamid.out.#{SecureRandom.hex(6)}" } ] }.to_json } }
-    @variant = Product.create!(name: "Concha", category: "tradicional")
-                      .variants.create!(name: "Vainilla", price_cents: 2_200)
+    @category = Category.create!(name: "Pan de prueba", slug: "pan-de-prueba")
+    product  = Product.create!(name: "Concha", category: @category,
+                                 variants_attributes: [ { name: "Vainilla", price_cents: 2_200 } ])
+    @variant = product.variants.first
     @zone = DeliveryZone.create!(name: "Valle de San Javier")
     @date = @zone.delivery_dates.create!(date: Date.tomorrow, cutoff_at: 1.hour.from_now)
   end
@@ -33,7 +35,7 @@ class WhatsappOrderingTest < ActionDispatch::IntegrationTest
   end
 
   test "an order placed on WhatsApp appears on tomorrow's production report" do
-    [ "hola", "menu:order", "cat:tradicional", "prod:#{@variant.product_id}", "12",
+    [ "hola", "menu:order", "cat:#{@category.id}", "prod:#{@variant.product_id}", "12",
      "more:no", "zone:#{@zone.id}", "date:#{@date.id}", "notes:skip", "confirm:yes" ].each { whatsapp(_1) }
 
     assert Order.last.pending_payment?

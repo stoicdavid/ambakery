@@ -1,0 +1,36 @@
+<% content_for :title, "Menú · Amora Masa" %>
+<div class="mb-6 flex items-center justify-between">
+  <h1 class="text-2xl font-semibold">Menú</h1>
+  <%= link_to "+ Nueva categoría", new_admin_category_path, class: "rounded bg-amber-900 px-4 py-2 text-white" %>
+</div>
+
+<% @categories.each do |category| %>
+  <section class="mb-6 rounded-xl border border-stone-200 bg-white">
+    <header class="flex flex-wrap items-center gap-3 border-b border-stone-100 px-5 py-3">
+      <h2 class="text-lg font-semibold"><%= category.name %></h2>
+      <span class="text-sm text-stone-500"><%= category.tagline %></span>
+      <% if category.seasonal? %>
+        <span class="rounded-full px-2 py-0.5 text-xs <%= category.in_season? ? "bg-green-100 text-green-800" : "bg-stone-100 text-stone-600" %>">
+          🗓 <%= category.season_label %> · <%= category.in_season? ? "en temporada" : "fuera de temporada" %>
+        </span>
+      <% end %>
+      <% unless category.active? %><span class="rounded-full bg-red-50 px-2 py-0.5 text-xs text-red-700">Oculta</span><% end %>
+      <span class="ml-auto flex gap-4 text-sm">
+        <%= link_to "+ Producto", new_admin_product_path(category_id: category.id), class: "text-amber-900" %>
+        <%= link_to "Editar", edit_admin_category_path(category), class: "text-stone-500" %>
+      </span>
+    </header>
+    <table class="w-full text-sm">
+      <% category.products.each do |product| %>
+        <tr class="border-b border-stone-50 last:border-0 <%= "opacity-50" unless product.active? %>">
+          <td class="px-5 py-2 font-medium"><%= product.name %></td>
+          <td class="px-5 py-2 text-stone-600">
+            <%= product.variants.map { |v| "#{v.name} #{number_to_currency(v.price, unit: "$")}" }.join(" · ") %>
+          </td>
+          <td class="px-5 py-2 text-right"><%= link_to "Editar", edit_admin_product_path(product), class: "text-stone-500" %></td>
+        </tr>
+      <% end %>
+    </table>
+    <% if category.products.empty? %><p class="px-5 py-3 text-sm text-stone-400">Sin productos todavía.</p><% end %>
+  </section>
+<% end %>

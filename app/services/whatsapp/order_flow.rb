@@ -41,30 +41,36 @@ module Whatsapp
 
     # ── Catalog ───────────────────────────────────────────
     def ask_choose_category
-      rows = Product::CATEGORY_NAMES.filter_map do |key, name|
-        { id: "cat:#{key}", title: name } if Product.available.exists?(category: key)
+      rows = Category.on_menu.filter_map do |category|
+        next unless category.products.available.exists?
+        { id: "cat:#{category.id}", title: category.name.truncate(24), description: category.tagline.to_s.truncate(72) }
       end
-      list "Elige una categoría:", "Ver categorías", rows
+      if rows.empty?
+        text "Por ahora no tenemos productos disponibles 😔 Te comunico con el equipo."
+        return hand_off
+      end
+      list "Elige una categoría:", "Ver categorías", rows.first(10)
       @conv.transition!("choose_category")
     end
 
     def on_choose_category
-      category = picked("cat")
-      return retry_state unless Product::CATEGORIES.include?(category)
-      remember category: category
+      
+      category = Category.on_menu.find { |c| c.id.to_s == picked("cat") }
+      return retry_state unless category
+      remember category_id: category.id
       ask_choose_product
     end
 
     def ask_choose_product
-      products = Product.available.where(category: ctx["category"])
+      products = Product.available.where(category_id: ctx["category_id"]).first(10)
       list "¿Qué se te antoja?", "Ver productos",
-           products.map { |p| { id: "prod:#{p.id}", title: p.name, description: p.description } }
+           products.map { |p| { id: "prod:#{p.id}", title: p.name.truncate(24), description: p.description.to_s.truncate(72) } }
       @conv.transition!("choose_product")
     end
 
     def on_choose_product
-      product = Product.available.find_by(id: picked("prod"))
-      return retry_state unless product
+      product = Product.available.includes(:category).find_by(id: picked("prod"))
+      return retry_state unless product&.category&.active? && product.category.in_season?
 
       variants = product.variants.where(active: true)
       if variants.one?

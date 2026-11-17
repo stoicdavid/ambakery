@@ -8,50 +8,59 @@
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
 
-def product(name, category:, position:, variants: { "Pieza" => 0 }, **attrs)
-  p = Product.find_or_create_by!(name: name) do |pr|
-    pr.category = category
-    pr.position = position
-    pr.assign_attributes(attrs)
-  end
-  variants.each_with_index do |(vname, cents), i|
-    p.variants.find_or_create_by!(name: vname) { |v| v.price_cents = cents; v.position = i }
+def category(name, slug:, position:, **attrs)
+  Category.find_or_create_by!(slug: slug) do |c|
+    c.name = name
+    c.position = position
+    c.assign_attributes(attrs)
   end
 end
+
+# Creates the product with its presentations in one save. Existing products are left alone,
+# so running the seeds again doesn't overwrite prices the team changed in the admin.
+def product(name, category:, position:, variants: { "Pieza" => 0 }, **attrs)
+  Product.find_or_initialize_by(name: name).tap do |p|
+    next if p.persisted?
+    p.assign_attributes(category: category, position: position, **attrs)
+    variants.each_with_index do |(vname, cents), i|
+      p.variants.build(name: vname, price_cents: cents, position: i)
+    end
+    p.save!
+  end
+end
+
+tradicional = category "Pan tradicional",    slug: "pan-tradicional",    position: 0, tagline: "De siempre"
+especial    = category "Selección especial", slug: "seleccion-especial", position: 1, tagline: "De la casa"
+muertos     = category "Día de Muertos",     slug: "dia-de-muertos",     position: 2, tagline: "De temporada",
+                       seasonal: true, starts_on: Date.new(2026, 10, 1), ends_on: Date.new(2026, 11, 2),
+                       description: "Pan de muerto hecho en casa, sólo por temporada"
+navidad     = category "Navidad",            slug: "navidad",            position: 3, tagline: "De temporada",
+                       seasonal: true, starts_on: Date.new(2026, 12, 1), ends_on: Date.new(2027, 1, 6),
+                       description: "Rosca de reyes y pan navideño"
 
 # Pan tradicional: sold by the piece. TODO: real prices
 %w[Concha Pan\ de\ leche Azucarado Polveado Polvorón Chalupa
    Cartera Gusano Elote Taco Rosca\ de\ sal].each_with_index do |name, i|
-  product(name, category: "tradicional", position: i)
+  product(name, category: tradicional, position: i)
 end
 
 # Selección especial de la casa
-product "Apastelada",              category: "especial", position: 0,
+product "Apastelada",              category: especial, position: 0,
         description: "Rellena de queso fresco"
-product "Gusano y empanada",       category: "especial", position: 1,
+product "Gusano y empanada",       category: especial, position: 1,
         description: "Rellenos de queso fresco",
         variants: { "Gusano" => 0, "Empanada" => 0 }
-product "Galletas de mantequilla", category: "especial", position: 2,
+product "Galletas de mantequilla", category: especial, position: 2,
         variants: { "Sencillas" => 0, "Con nuez" => 0 }
-product "Besitos de nuez",         category: "especial", position: 3,
+product "Besitos de nuez",         category: especial, position: 3,
         variants: { "Paquete 250 g" => 0 }
-product "Frutas de horno",         category: "especial", position: 4,
+product "Frutas de horno",         category: especial, position: 4,
         variants: { "Paquete 12 pzas" => 0 }
-product "Pemoles",                 category: "especial", position: 5,
+product "Pemoles",                 category: especial, position: 5,
         description: "Galletas de maíz con mantequilla",
         variants: { "Paquete 250 g" => 0 }
 
-# Seasonal: hidden until Día de Muertos
-product "Pan de muerto", category: "temporada", position: 0, active: false
-
-pachuca = DeliveryZone.find_or_create_by!(name: "Valle de San Javier") do |z|
-  z.description = "Pachuca, Hgo."; z.position = 0
-end
-cdmx = DeliveryZone.find_or_create_by!(name: "Ángel de la Independencia") do |z|
-  z.description = "CDMX · punto de entrega"; z.position = 1
-end
-# Example dates. The team will add real ones from the admin (Step 8)
-[ pachuca, cdmx ].each do |zone|
-  date = Date.current.next_occurring(:friday)
-  zone.delivery_dates.find_or_create_by!(date: date) { |d| d.cutoff_at = (date - 2).end_of_day }
-end
+# Seasonal: each one shows up only inside its category's dates
+product "Pan de muerto",   category: muertos, position: 0
+product "Rosca de reyes",  category: navidad, position: 0,
+        variants: { "Chica" => 0, "Mediana" => 0, "Grande" => 0 }

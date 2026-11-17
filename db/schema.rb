@@ -10,7 +10,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_14_070809) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_16_194340) do
+  create_table "categories", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "slug", null: false
+    t.string "tagline"
+    t.text "description"
+    t.integer "position", default: 0, null: false
+    t.boolean "active", default: true, null: false
+    t.boolean "seasonal", default: false, null: false
+    t.date "starts_on"
+    t.date "ends_on"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["slug"], name: "index_categories_on_slug", unique: true
+  end
+
   create_table "customers", force: :cascade do |t|
     t.string "name"
     t.string "phone"
@@ -87,7 +102,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_14_070809) do
 
   create_table "products", force: :cascade do |t|
     t.string "name", null: false
-    t.string "category", null: false
     t.text "description"
     t.integer "price_cents", default: 0, null: false
     t.boolean "active", default: true, null: false
@@ -96,7 +110,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_14_070809) do
     t.integer "position", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["category", "active"], name: "index_products_on_category_and_active"
+    t.integer "category_id"
+    t.index ["category_id"], name: "index_products_on_category_id"
   end
 
   create_table "sessions", force: :cascade do |t|
@@ -151,6 +166,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_14_070809) do
   add_foreign_key "orders", "delivery_dates"
   add_foreign_key "orders", "delivery_zones"
   add_foreign_key "product_variants", "products"
+  add_foreign_key "products", "categories"
   add_foreign_key "sessions", "users"
   add_foreign_key "whatsapp_conversations", "customers"
   add_foreign_key "whatsapp_conversations", "orders", column: "draft_order_id"

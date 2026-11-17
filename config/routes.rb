@@ -14,8 +14,14 @@ Rails.application.routes.draw do
     resources :conversations, only: %i[index show] do
       resources :replies, only: :create
     end
+    resources :categories, except: :show
+    resources :products,   except: %i[index show]
   end
 
+  namespace :api do
+    get "menu", to: "menus#show"
+  end
+  
   scope "webhooks" do
     get  "whatsapp", to: "whatsapp_webhooks#verify"
     post "whatsapp", to: "whatsapp_webhooks#receive"

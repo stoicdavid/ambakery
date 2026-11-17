@@ -1,4 +1,18 @@
-<div>
-  <h1 class="font-bold text-4xl">Admin::Dashboard#index</h1>
-  <p>Find me in app/views/admin/dashboard/index.html.erb</p>
+<% content_for :title, "Panel · Amora Masa" %>
+<h1 class="mb-1 text-2xl font-semibold">Hola 👋</h1>
+<p class="mb-8 text-stone-500"><%= l(Date.current, format: :long) %></p>
+
+<div class="grid gap-4 sm:grid-cols-3">
+  <% [
+       [ admin_orders_path,     "🧾", "Pedidos",    @pending,  "por atender" ],
+       [ admin_production_path(date: @tomorrow), "🥖", "Producción", @units, "piezas para mañana" ],
+       [ admin_categories_path, "📋", "Menú",       @products, @season ? "productos · #{@season.name}" : "productos activos" ]
+     ].each do |path, icon, title, value, note| %>
+    <%= link_to path, class: "group rounded-xl border border-stone-200 bg-white p-6 transition hover:border-amber-700 hover:shadow" do %>
+      <div class="text-3xl"><%= icon %></div>
+      <div class="mt-3 text-lg font-semibold group-hover:text-amber-900"><%= title %></div>
+      <div class="mt-4 text-4xl font-semibold"><%= value %></div>
+      <div class="text-sm text-stone-500"><%= note %></div>
+    <% end %>
+  <% end %>
 </div>

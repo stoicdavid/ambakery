@@ -11,8 +11,10 @@ class Whatsapp::OrderFlowTest < ActiveSupport::TestCase
   setup do
     @client  = FakeClient.new([])
     @conv    = WhatsappConversation.for(Customer.from_whatsapp!(wa_id: "5215500000000", name: "Ana López"))
-    @variant = Product.create!(name: "Concha", category: "tradicional")
-                      .variants.create!(name: "Vainilla", price_cents: 2_200)
+    @category = Category.create!(name: "Pan de prueba", slug: "pan-de-prueba")
+    @variant  = Product.create!(name: "Concha", category: @category,
+                                variants_attributes: [ { name: "Vainilla", price_cents: 2_200 } ])
+                       .variants.first
     @zone    = DeliveryZone.create!(name: "Valle de San Javier")
     @date    = @zone.delivery_dates.create!(date: 3.days.from_now.to_date, cutoff_at: 2.days.from_now)
   end
@@ -25,7 +27,7 @@ class Whatsapp::OrderFlowTest < ActiveSupport::TestCase
   test "happy path creates a pending order" do
     assert_equal "menu",            say("hola").state
     assert_equal "choose_category", say("menu:order").state
-    assert_equal "choose_product",  say("cat:tradicional").state
+    assert_equal "choose_product",  say("cat:#{categories(:tradicional).id}").state
     assert_equal "quantity",        say("prod:#{@variant.product_id}").state   # single variant
     assert_equal "add_more",        say("6").state
     assert_equal "zone",            say("more:no").state
@@ -48,7 +50,7 @@ class Whatsapp::OrderFlowTest < ActiveSupport::TestCase
 
   test "refuses a full delivery date" do
     @date.update!(capacity: 0)
-    say "hola"; say "menu:order"; say "cat:tradicional"; say "prod:#{@variant.product_id}"
+    say "hola"; say "menu:order"; say "cat:#{categories(:tradicional).id}"; say "prod:#{@variant.product_id}"
     say "1"; say "more:no"
     assert_equal "zone", say("zone:#{@zone.id}").state   # no open dates → back to zones
   end
@@ -59,7 +61,7 @@ class Whatsapp::OrderFlowTest < ActiveSupport::TestCase
   end
 
   test "cancelar after adding items cancels the draft" do
-    say "hola"; say "menu:order"; say "cat:tradicional"; say "prod:#{@variant.product_id}"; say "6"
+    say "hola"; say "menu:order"; say "cat:#{categories(:tradicional).id}"; say "prod:#{@variant.product_id}"; say "6"
     assert_equal "idle", say("cancelar").state
     assert Order.last.cancelled?
   end
